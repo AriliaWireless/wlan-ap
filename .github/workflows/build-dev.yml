@@ -29,8 +29,8 @@ jobs:
     - name: Build image for ${{ matrix.target }}
       id: build
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
+        git config --global user.email "stephane.bourque@gmail.com"
+        git config --global user.name "stephb9959"
         make -j TARGET=${{ matrix.target }}
 
     - name: Package and upload image for ${{ matrix.target }}
