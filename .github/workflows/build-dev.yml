@@ -2,11 +2,11 @@ name: Build OpenWrt/uCentral images
 
 env:
   AWS_DEFAULT_OUTPUT: json
-  AWS_DEFAULT_REGION: us-east-1
-  AWS_S3_BUCKET_NAME: ucentral-ap-firmware
-  AWS_ACCOUNT_ID: ${{ secrets.UCENTRAL_S3_ACCOUNT_ID }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.UCENTRAL_S3_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.UCENTRAL_S3_ACCESS_KEY_SECRET }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_FIRMWARE_REGION }}
+  AWS_S3_BUCKET_NAME: ${{ secrets.AWS_FIRMWARE_BUCKET_NAME }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_FIRMWARE_BUILDER }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_FIRMWARE_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_FIRMWARE_SECRET_ACCESS_KEY }}
 
 on:
   push:
@@ -59,12 +59,12 @@ jobs:
         JSON_NAME="$BASENAME.json";
 
         tar cfz "$TAR_NAME" -C openwrt/bin/targets/ .
-        curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "$TAR_NAME" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/"$TAR_NAME""
+        # curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "$TAR_NAME" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/"$TAR_NAME""
         IMG_NAME="$BASENAME-upgrade.bin";
         TIP_VERSION="$(grep DISTRIB_TIP= openwrt/tmp/openwrt_release | cut -d\' -f2)"
         echo -e "{\n\t\"image\":\""${IMG_NAME}"\",\n\t\"revision\": \""${TIP_VERSION}"\",\n\t\"timestamp\":\""$(date +%s)"\",\n\t\"compatible\": \""${LOWERCASE_TARGET}"\"\n}" > latest-upgrade.json
-        [ -f openwrt/tmp/image-file ] && curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "openwrt/$(cat openwrt/tmp/image-file)" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/"$IMG_NAME""
-        [ -f openwrt/tmp/image-file ] && curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "latest-upgrade.json" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/latest-upgrade.json"
+        # [ -f openwrt/tmp/image-file ] && curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "openwrt/$(cat openwrt/tmp/image-file)" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/"$IMG_NAME""
+        # [ -f openwrt/tmp/image-file ] && curl -u $GH_BUILD_USERNAME:$GH_BUILD_PASSWORD -T "latest-upgrade.json" "https://tip.jfrog.io/artifactory/tip-wlan-ap-firmware/uCentral/$LOWERCASE_TARGET/latest-upgrade.json"
 
         [ -f openwrt/tmp/image-file ] && aws s3 cp --acl public-read --content-type "application/octet-stream" "openwrt/$(cat openwrt/tmp/image-file)" "s3://$AWS_S3_BUCKET_NAME/$IMG_NAME"
         [ -f openwrt/tmp/image-file ] && aws s3api put-object-tagging --bucket "$AWS_S3_BUCKET_NAME" --key "$IMG_NAME" --tagging "{\"TagSet\":[{\"Key\":\"release\",\"Value\":\"$IS_RELEASE\"}]}"
