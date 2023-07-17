@@ -17,8 +17,10 @@ def clone_tree():
 		print("### Cloning tree: ", config["repo"])
 		Path(openwrt).mkdir(exist_ok=True, parents=True)
 		if git_ref != "":
+			print("   ### ref: " , git_ref)
 			run(["git", "clone", "--reference", git_ref, config["repo"], openwrt], check=True)
 		else:
+			print("   ### ref: none")
 			run(["git", "clone", config["repo"], openwrt], check=True)
 		print("### Clone done")
 	except:
