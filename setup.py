@@ -14,7 +14,7 @@ def clone_tree():
 			print("### OpenWrt checkout is already present. Please run --rebase")
 			sys.exit(-1)
 
-		print("### Cloning tree")
+		print("### Cloning tree: ", config["repo"])
 		Path(openwrt).mkdir(exist_ok=True, parents=True)
 		if git_ref != "":
 			run(["git", "clone", "--reference", git_ref, config["repo"], openwrt], check=True)
