@@ -2,11 +2,11 @@ name: Test x64_vm build and AMI creation
 
 env:
   AWS_DEFAULT_OUTPUT: json
-  AWS_DEFAULT_REGION: us-east-1
-  AWS_S3_BUCKET_NAME: ucentral-ap-firmware
-  AWS_ACCOUNT_ID: ${{ secrets.UCENTRAL_S3_ACCOUNT_ID }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.UCENTRAL_S3_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.UCENTRAL_S3_ACCESS_KEY_SECRET }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_FIRMWARE_REGION }}
+  AWS_S3_BUCKET_NAME: ${{ secrets.AWS_FIRMWARE_BUCKET_NAME }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_FIRMWARE_BUILDER }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_FIRMWARE_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_FIRMWARE_SECRET_ACCESS_KEY }}
 
 on:
   workflow_dispatch:
