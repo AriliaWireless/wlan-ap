@@ -13,7 +13,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       x64_vm_image_name: ${{ steps.package_and_upload_image.outputs.x64_vm_image_name }}
     strategy:
@@ -75,7 +75,7 @@ jobs:
         fi
 
   create-x64_vm-ami:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     steps:
     - uses: actions/checkout@v3
