@@ -53,7 +53,6 @@ jobs:
           REF=$(echo ${GITHUB_REF#refs/tags/} | tr '/' '-')
           IS_RELEASE="true"
         fi
-
         BASENAME="$(date +%Y%m%d)-$LOWERCASE_TARGET-$REF-$HASH"
         TAR_NAME="$BASENAME.tar.gz"
         IMG_NAME="$BASENAME-upgrade.bin";
