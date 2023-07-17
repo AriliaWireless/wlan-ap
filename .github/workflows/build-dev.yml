@@ -1,5 +1,6 @@
 name: Build OpenWrt/uCentral images
 
+
 env:
   AWS_DEFAULT_OUTPUT: json
   AWS_DEFAULT_REGION: ${{ secrets.AWS_FIRMWARE_REGION }}
